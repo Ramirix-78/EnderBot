@@ -31,8 +31,12 @@ module.exports = {
             content: 'Iniciando el servidor de Minecraft... Esto puede tomar un momento.',
         });
 
-        // URL del servidor intermedio (cambiar la IP si es requerido) 
-        const servidorIntermedioURL = 'https://3044-2800-98-110e-3c3-b53c-3b1-cbd3-f784.ngrok-free.app/startserver';
+        // URL del servidor intermedio (base URL y endpoint separados)
+        const baseURL = 'https://8707-2800-98-110e-3c3-64bc-fa15-a426-d5be.ngrok-free.app';
+        const endpoint = '/startserver';
+
+        // Concatenar la URL completa cuando sea necesario
+        const servidorIntermedioURL = baseURL + endpoint;
 
         try {
             // Realizar la solicitud HTTP POST al servidor intermedio
@@ -43,6 +47,11 @@ module.exports = {
                 console.log(JSON.stringify(response.data));
                 await interaction.editReply({
                     content : `El servidor de Minecraft ya está en línea.\nJugadores conectados: ${response.data.players}\nNúmero máximo de jugadores: ${response.data.max_players}`
+                });
+            }
+            else if (response.data.status === 'starting') {
+                await interaction.editReply({
+                    content: 'El servidor de Minecraft se está iniciando. Esto puede tomar algunos minutos.'
                 });
             }
             else {
